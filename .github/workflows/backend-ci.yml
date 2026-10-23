@@ -1,0 +1,51 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-static:
+    name: backend-static
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: 安装 uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.13.0"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - name: 安装项目指定的 Python
+        run: uv python install
+
+      - name: 按锁文件恢复依赖
+        run: uv sync --locked
+
+      - name: Ruff 规则检查
+        run: uv run --locked ruff check .
+
+      - name: Ruff 格式检查
+        run: uv run --locked ruff format --check .
+
+      - name: mypy 类型检查
+        run: uv run --locked mypy src/yuki migrations

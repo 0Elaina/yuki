@@ -1,0 +1,41 @@
+name: PR Title
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, edited, synchronize]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-title:
+    name: pr-title
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      # 此 workflow 只读取 PR 元数据，不检出或执行 PR 分支代码。
+      - name: 校验 PR 标题
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            refactor
+            perf
+            style
+            test
+            build
+            ci
+            chore
+            revert
+          requireScope: false
+          subjectPattern: '\S'
+          subjectPatternError: PR 标题需要包含非空的改动说明。
