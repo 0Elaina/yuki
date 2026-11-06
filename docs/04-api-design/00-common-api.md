@@ -2,7 +2,7 @@
 
 ## JSON 响应
 
-普通 JSON 接口显式使用 ApiResponse 泛型模型，通过 response_model 声明响应类型。
+普通 JSON 接口使用 ApiResponse 泛型返回类型标注，由 FastAPI 推导响应模型；需要覆盖推导结果时再显式设置 response_model。接口错误码在对应模块的 API 文档中维护，路由不逐项重复声明错误响应。
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
