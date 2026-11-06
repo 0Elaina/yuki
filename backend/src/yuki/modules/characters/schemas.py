@@ -69,3 +69,11 @@ class CharacterListItem(BaseModel):
             created_at=character.created_at,
             updated_at=character.updated_at,
         )
+
+
+class CharacterUpdate(BaseModel):
+    """更新角色请求"""
+
+    model_config = ConfigDict(extra="forbid")
+    name: CharacterName
+    persona: CharacterPersona
