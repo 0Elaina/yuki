@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Self
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints
 
@@ -6,6 +6,7 @@ from yuki.modules.characters.constants import (
     CHARACTER_NAME_MAX_LENGTH,
     CHARACTER_PERSONA_MAX_LENGTH,
 )
+from yuki.modules.characters.models import Character
 
 CharacterName = Annotated[
     str,
@@ -35,3 +36,13 @@ class CharacterDetail(BaseModel):
     persona: str
     created_at: AwareDatetime = Field(serialization_alias="createdAt")
     updated_at: AwareDatetime = Field(serialization_alias="updatedAt")
+
+    @classmethod
+    def of(cls, character: Character) -> Self:
+        return cls(
+            id=str(character.id),
+            name=character.name,
+            persona=character.persona,
+            created_at=character.created_at,
+            updated_at=character.updated_at,
+        )
