@@ -22,13 +22,13 @@ class CommonApiCode:
     )
     CONFLICT: Final = ApiCode(status.HTTP_409_CONFLICT, "CONFLICT", "资源状态冲突")
     UPLOAD_TOO_LARGE: Final = ApiCode(
-        status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, "UPLOAD_TOO_LARGE", "上传文件或请求过大"
+        status.HTTP_413_CONTENT_TOO_LARGE, "UPLOAD_TOO_LARGE", "上传文件或请求过大"
     )
     UNSUPPORTED_MEDIA_TYPE: Final = ApiCode(
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "UNSUPPORTED_MEDIA_TYPE", "请求内容类型不支持"
     )
     PARAM_VALIDATION_FAILED: Final = ApiCode(
-        status.HTTP_422_UNPROCESSABLE_ENTITY, "PARAM_VALIDATION_FAILED", "参数校验未通过"
+        status.HTTP_422_UNPROCESSABLE_CONTENT, "PARAM_VALIDATION_FAILED", "参数校验未通过"
     )
     TOO_MANY_REQUESTS: Final = ApiCode(
         status.HTTP_429_TOO_MANY_REQUESTS, "TOO_MANY_REQUESTS", "请求过于频繁，请稍后重试"
