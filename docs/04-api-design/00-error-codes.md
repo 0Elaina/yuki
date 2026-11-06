@@ -16,6 +16,12 @@ ApiCode 是不可变数据类，保存 HTTP 状态、字符串业务码与默认
 | 500 | INTERNAL_SERVER_ERROR | 系统内部异常，请稍后重试 |
 | 503 | SERVICE_UNAVAILABLE | 服务暂不可用，请稍后重试 |
 
+### 角色模块业务码
+
+| HTTP 状态 | 业务码 | 默认消息 |
+| --- | --- | --- |
+| 404 | CHARACTER_NOT_FOUND | 角色不存在 |
+
 参数校验失败使用固定默认消息。业务异常可提供公开的自定义消息；未知异常返回固定 INTERNAL_SERVER_ERROR，堆栈由 Uvicorn 记录。
 
 业务码提供公共响应语义，具体接口使用的错误码见对应模块文档。响应结构见[公共 API 契约](00-common-api.md)。

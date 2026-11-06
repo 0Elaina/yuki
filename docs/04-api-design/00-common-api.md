@@ -2,7 +2,7 @@
 
 ## JSON 响应
 
-普通 JSON 接口显式使用 ApiResponse 泛型模型，通过 response_model 声明响应类型。
+普通 JSON 接口使用 ApiResponse 泛型返回类型标注，由 FastAPI 推导响应模型；需要覆盖推导结果时再显式设置 response_model。接口错误码在对应模块的 API 文档中维护，路由不逐项重复声明错误响应。
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
@@ -59,6 +59,6 @@ OpenAPI 的公共 422、500 响应声明使用相同的 ApiResponse 结构。实
 | size | int | 每页条数 |
 | pages | int | 总页数 |
 
-调用 apaginate 时传入已有 session、明确排序的 Select 和 PageQuery；嵌套在 ApiResponse 中时，通过库原生 Config(page_cls=Page[输出模型]) 显式指定结果类型。输出模型按需启用 Pydantic 的 from_attributes，业务模块负责具体的数据转换。
+调用 apaginate 时传入已有 session、明确排序的 Select 和 PageQuery；嵌套在 ApiResponse 中时，通过库原生 Config(page_cls=Page[模型]) 显式指定结果类型。当数据访问层查询 ORM 时返回 Page[ORM]；业务层在事务内将其 items 转换为 Page[输出模型]，复用原始分页元数据返回。输出模型按需启用 Pydantic 的 from_attributes，业务模块负责具体的数据转换。
 
 业务层在 session.begin() 内执行查询；分页不另建会话或管理事务。计数使用库原生能力，需要专用计数时传入 count_query。参考[官方 SQLAlchemy 集成](https://uriyyo-fastapi-pagination.netlify.app/integrations/sqlalchemy/paginate/)。
