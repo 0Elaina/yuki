@@ -10,6 +10,7 @@ from yuki.modules.characters.schemas import (
     CharacterDetail,
     CharacterKeyword,
     CharacterListItem,
+    CharacterUpdate,
 )
 from yuki.shared.api.pagination import PageQuery
 from yuki.shared.api.response import ApiResponse
@@ -51,4 +52,16 @@ async def get_character(
     """查询角色详情"""
 
     detail = await service.get_character(session, character_id=character_id)
+    return ApiResponse.success(detail)
+
+
+@router.put("/{character_id}", summary="修改角色资料")
+async def update_character(
+    character_id: Annotated[int, Path(gt=0, le=BIGINT_MAX)],
+    body: CharacterUpdate,
+    session: SessionDep,
+) -> ApiResponse[CharacterDetail]:
+    """修改角色资料"""
+
+    detail = await service.update_character(session, character_id=character_id, data=body)
     return ApiResponse.success(detail)

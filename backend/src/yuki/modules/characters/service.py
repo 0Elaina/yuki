@@ -4,7 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from yuki.modules.characters import repository
 from yuki.modules.characters.api_code import CharacterApiCode
 from yuki.modules.characters.models import Character
-from yuki.modules.characters.schemas import CharacterCreate, CharacterDetail, CharacterListItem
+from yuki.modules.characters.schemas import (
+    CharacterCreate,
+    CharacterDetail,
+    CharacterListItem,
+    CharacterUpdate,
+)
 from yuki.shared.api.pagination import PageQuery
 from yuki.shared.exceptions import BusinessException
 
@@ -42,3 +47,19 @@ async def list_characters(
     return Page[CharacterListItem](
         items=items, total=page.total, page=page.page, size=page.size, pages=page.pages
     )
+
+
+async def update_character(
+    session: AsyncSession, *, character_id: int, data: CharacterUpdate
+) -> CharacterDetail:
+    """更新角色"""
+
+    async with session.begin():
+        character = await repository.find_character_by_id(session, character_id=character_id)
+        if character is None:
+            raise BusinessException(CharacterApiCode.CHARACTER_NOT_FOUND)
+        character = await repository.update_character(
+            session, character=character, name=data.name, persona=data.persona
+        )
+        detail = CharacterDetail.of(character)
+    return detail

@@ -39,3 +39,14 @@ async def page_characters(
     stmt = stmt.order_by(Character.id.desc())
     result = await apaginate(session, stmt, params=params, config=Config(page_cls=Page[Character]))
     return result
+
+
+async def update_character(
+    session: AsyncSession, *, character: Character, name: str, persona: str
+) -> Character:
+    """更新角色"""
+
+    character.name = name
+    character.persona = persona
+    await session.flush()
+    return character
