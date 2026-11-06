@@ -63,3 +63,12 @@ async def update_character(
         )
         detail = CharacterDetail.of(character)
     return detail
+
+
+async def delete_characters(session: AsyncSession, *, ids: list[int]) -> None:
+    """批量删除角色"""
+
+    async with session.begin():
+        deleted_ids = await repository.delete_characters(session, ids=ids)
+        if len(deleted_ids) != len(ids):
+            raise BusinessException(CharacterApiCode.CHARACTER_NOT_FOUND)
