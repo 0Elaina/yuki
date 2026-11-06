@@ -145,3 +145,59 @@
 | 404 | CHARACTER_NOT_FOUND |
 | 422 | PARAM_VALIDATION_FAILED |
 | 500 | INTERNAL_SERVER_ERROR |
+
+## POST /api/v1/characters/batch-delete
+
+批量删除角色；任一指定角色不存在时整批回滚，不产生局部删除。
+
+**请求参数**
+
+| 字段 | 类型 | 位置(body/query/path/header) | 必填 | 说明（枚举须写全映射） |
+| --- | --- | --- | --- | --- |
+| ids | array<string> | body | ✅ | 待删除的角色 ID 数组，1～100 项，不可重复，每项为十进制数字字符串 |
+
+**响应示例**
+
+```json
+{
+  "data": null,
+  "code": "SUCCESS",
+  "message": "响应成功"
+}
+```
+
+**错误码**
+
+| 状态码 | 错误码 |
+| --- | --- |
+| 404 | CHARACTER_NOT_FOUND |
+| 422 | PARAM_VALIDATION_FAILED |
+| 500 | INTERNAL_SERVER_ERROR |
+
+## DELETE /api/v1/characters/{character_id}
+
+根据角色 ID 删除单个角色。
+
+**请求参数**
+
+| 字段 | 类型 | 位置(body/query/path/header) | 必填 | 说明（枚举须写全映射） |
+| --- | --- | --- | --- | --- |
+| character_id | int | path | ✅ | 角色 ID，大于 0 且不超过 2^63 - 1 |
+
+**响应示例**
+
+```json
+{
+  "data": null,
+  "code": "SUCCESS",
+  "message": "响应成功"
+}
+```
+
+**错误码**
+
+| 状态码 | 错误码 |
+| --- | --- |
+| 404 | CHARACTER_NOT_FOUND |
+| 422 | PARAM_VALIDATION_FAILED |
+| 500 | INTERNAL_SERVER_ERROR |
