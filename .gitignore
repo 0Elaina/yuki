@@ -1,0 +1,10 @@
+# 根目录的本地 Agent 指令与长期上下文。
+/AGENTS.md
+/agent.md
+/CONTEXT.md
+/context.md
+
+# 根目录的本地工具与账号配置，前后端产物由各自的忽略规则维护。
+/.agents/
+/.codex/
+/.aws/
