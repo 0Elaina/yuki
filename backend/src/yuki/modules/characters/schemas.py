@@ -1,13 +1,20 @@
 from typing import Annotated, Self
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, field_validator
 
 from yuki.modules.characters.constants import (
+    CHARACTER_BATCH_DELETE_MAX_SIZE,
     CHARACTER_NAME_MAX_LENGTH,
     CHARACTER_PERSONA_MAX_LENGTH,
 )
 from yuki.modules.characters.models import Character
-from yuki.shared.util.field_constants import CREATED_ALIAS, STR_ID_DESCRIPTION, UPDATED_ALIAS
+from yuki.shared.type.field_type import NormalizedId
+from yuki.shared.util.field_utils import (
+    CREATED_ALIAS,
+    STR_ID_DESCRIPTION,
+    UPDATED_ALIAS,
+    validate_unique_ids,
+)
 
 CharacterName = Annotated[
     str,
@@ -77,3 +84,16 @@ class CharacterUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
     name: CharacterName
     persona: CharacterPersona
+
+
+class CharacterBatchDelete(BaseModel):
+    """批量删除角色请求"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    ids: list[NormalizedId] = Field(min_length=1, max_length=CHARACTER_BATCH_DELETE_MAX_SIZE)
+
+    @field_validator("ids", mode="after")
+    @classmethod
+    def validate_unique_ids(cls, value: list[int]) -> list[int]:
+        return validate_unique_ids(value)

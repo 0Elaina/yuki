@@ -1,7 +1,7 @@
 from fastapi_pagination import Page
 from fastapi_pagination.config import Config
 from fastapi_pagination.ext.sqlalchemy import apaginate
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import load_only
 
@@ -50,3 +50,12 @@ async def update_character(
     character.persona = persona
     await session.flush()
     return character
+
+
+async def delete_characters(session: AsyncSession, *, ids: list[int]) -> list[int]:
+    """批量删除角色"""
+
+    result = await session.execute(
+        delete(Character).where(Character.id.in_(ids)).returning(Character.id)
+    )
+    return list(result.scalars().all())

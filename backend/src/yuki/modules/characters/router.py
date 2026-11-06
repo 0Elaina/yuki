@@ -6,6 +6,7 @@ from fastapi_pagination import Page
 from yuki.app.dependencies import SessionDep
 from yuki.modules.characters import service
 from yuki.modules.characters.schemas import (
+    CharacterBatchDelete,
     CharacterCreate,
     CharacterDetail,
     CharacterKeyword,
@@ -65,3 +66,23 @@ async def update_character(
 
     detail = await service.update_character(session, character_id=character_id, data=body)
     return ApiResponse.success(detail)
+
+
+@router.post("/batch-delete", summary="批量删除角色")
+async def batch_delete_characters(
+    body: CharacterBatchDelete, session: SessionDep
+) -> ApiResponse[None]:
+    """批量删除角色"""
+
+    await service.delete_characters(session, ids=body.ids)
+    return ApiResponse.success()
+
+
+@router.delete("/{character_id}", summary="根据ID删除角色")
+async def delete_character(
+    character_id: Annotated[int, Path(gt=0, le=BIGINT_MAX)], session: SessionDep
+) -> ApiResponse[None]:
+    """根据ID删除角色"""
+
+    await service.delete_characters(session, ids=[character_id])
+    return ApiResponse.success()
