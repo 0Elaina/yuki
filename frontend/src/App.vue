@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+
+import AppProviders from '@/app/providers/AppProviders.vue'
+</script>
 
 <template>
-  <main></main>
+  <AppProviders>
+    <RouterView />
+  </AppProviders>
 </template>
-
-<style scoped></style>
