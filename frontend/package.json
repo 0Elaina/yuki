@@ -21,7 +21,10 @@
     "check": "run-p type-check lint format:check"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^5.106.1",
+    "@vicons/ionicons5": "^0.13.0",
     "axios": "^1.21.0",
+    "dayjs": "^1.11.23",
     "naive-ui": "^2.45.3",
     "pinia": "^4.0.3",
     "vue": "^3.5.42",
