@@ -42,6 +42,16 @@ GitHub Actions 配置位于 [.github/workflows/ci.yml](../.github/workflows/ci.y
 
 依赖声明与 uv.lock 一同提交；依赖变更后先在本地运行 uv sync 更新锁文件。CI 不读取本地 .env，不启动数据库或 Redis。接入方式参考 [uv 官方 GitHub Actions 指南](https://docs.astral.sh/uv/guides/integration/github/)。
 
+前端使用 Node.js 24 与 pnpm，pnpm 版本取自 package.json 的 packageManager 字段；通过 `pnpm install --frozen-lockfile` 按锁文件安装依赖，然后在 frontend 执行以下检查：
+
+| 检查 | 命令 |
+| --- | --- |
+| oxlint 与 ESLint | pnpm lint |
+| Prettier 格式检查 | pnpm format:check |
+| 类型检查与构建 | pnpm build |
+
+`pnpm build` 内含 vue-tsc，不再单独执行 type-check。依赖声明与 pnpm-lock.yaml 一同提交，依赖变更后先在本地运行 pnpm install 更新锁文件；CI 不读取本地 .env。
+
 ## 本地共享基础设施
 
 共享 Docker 基础设施位于 `/home/nepgear/001-Own/01-Dev/dev-infra`。
