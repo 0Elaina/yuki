@@ -10,6 +10,7 @@ import {
   zhCN,
 } from 'naive-ui'
 
+import HttpErrorBridge from '@/app/providers/HttpErrorBridge.vue'
 import { createThemeOverrides } from '@/app/theme/theme-overrides'
 
 const themeOverrides = createThemeOverrides()
@@ -22,7 +23,9 @@ const themeOverrides = createThemeOverrides()
       <NDialogProvider>
         <NNotificationProvider>
           <NMessageProvider>
-            <slot />
+            <HttpErrorBridge>
+              <slot />
+            </HttpErrorBridge>
           </NMessageProvider>
         </NNotificationProvider>
       </NDialogProvider>
