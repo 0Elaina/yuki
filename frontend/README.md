@@ -1,48 +1,39 @@
-# frontend
+# Yuki 前端
 
-This template should help get you started developing with Vue 3 in Vite.
+Yuki 的单一 Vue 3 Web 应用，提供聊天、角色与应用设置界面。技术栈为 TypeScript、Vue 3、Vite、Vue Router、Pinia、Naive UI。
 
-## Recommended IDE Setup
+## 环境要求
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+- Node.js `^22.18.0` 或 `>=24.12.0`
+- pnpm，版本由 `package.json` 的 `packageManager` 字段固定
 
 ```sh
 pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+## 常用命令
 
-```sh
-pnpm build
-```
+| 命令                | 用途                                |
+| ------------------- | ----------------------------------- |
+| `pnpm dev`          | 启动开发服务器                      |
+| `pnpm build`        | 类型检查后构建到 `dist/`            |
+| `pnpm type-check`   | `vue-tsc` 类型检查                  |
+| `pnpm lint`         | oxlint 与 ESLint 只检查，不修改文件 |
+| `pnpm lint:fix`     | oxlint 与 ESLint 检查并自动修复     |
+| `pnpm format`       | Prettier 格式化并写入               |
+| `pnpm format:check` | Prettier 只检查格式                 |
+| `pnpm check`        | 类型检查、lint 与格式检查并行执行   |
 
-### Lint with [ESLint](https://eslint.org/)
+`pnpm lint` 与 `pnpm format:check` 不修改文件，供 CI 复用；本地改代码用对应的 `:fix` 与 `format`。
 
-```sh
-pnpm lint
-```
+## 目录约定
+
+| 目录           | 职责                                                     |
+| -------------- | -------------------------------------------------------- |
+| `src/app`      | 应用初始化、路由、布局、主题与全局 Provider              |
+| `src/pages`    | 页面入口与功能组合                                       |
+| `src/features` | 按角色、聊天、资源、设置等功能组织组件、请求、状态与类型 |
+| `src/shared`   | 公共 HTTP 能力、通用组件与稳定工具                       |
+
+依赖方向为 `app → pages → features → shared`，下层不反向引用上层。
