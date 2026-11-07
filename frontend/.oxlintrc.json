@@ -2,9 +2,11 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue"],
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "categories": {
     "correctness": "error"
-  }
+  },
+  "ignorePatterns": ["dist/**", "dist-ssr/**", "coverage/**"]
 }

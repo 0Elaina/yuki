@@ -1,0 +1,8 @@
+@layer theme, base, components, utilities;
+
+/*
+ * 只引入主题变量与工具类，跳过 preflight：
+ * Naive UI 自带全局重置，两套 reset 叠在一起会互相覆盖。
+ */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
