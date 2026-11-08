@@ -19,7 +19,7 @@ export interface CharacterDetail {
   updatedAt: string;
 }
 
-export interface CharacterUpdatePayload {
+export interface CharacterPayload {
   name: string;
   persona: string;
 }

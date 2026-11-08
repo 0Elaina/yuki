@@ -4,8 +4,8 @@ import type { Page } from '@/shared/api/types';
 import type {
   CharacterDetail,
   CharacterListParams,
+  CharacterPayload,
   CharacterSummary,
-  CharacterUpdatePayload,
 } from '../types/characters';
 
 /**
@@ -46,13 +46,46 @@ export function fetchCharacterDetail(id: string): Promise<CharacterDetail> {
  * @param payload 更新数据
  * @returns 角色详情
  */
-export function updateCharacter(
-  id: string,
-  payload: CharacterUpdatePayload,
-): Promise<CharacterDetail> {
+export function updateCharacter(id: string, payload: CharacterPayload): Promise<CharacterDetail> {
   return request<CharacterDetail>({
     method: 'PUT',
     url: `/characters/${id}`,
     data: payload,
+  });
+}
+
+/**
+ * 创建角色
+ *
+ * @param payload 角色数据
+ * @returns 角色详情
+ */
+export function createCharacter(payload: CharacterPayload): Promise<CharacterDetail> {
+  return request<CharacterDetail>({
+    method: 'POST',
+    url: '/characters',
+    data: payload,
+  });
+}
+
+/**
+ * 删除角色
+ *
+ * @param id 角色 ID
+ */
+export function deleteCharacter(id: string): Promise<null> {
+  return request<null>({
+    method: 'DELETE',
+    url: `/characters/${id}`,
+  });
+}
+
+export function batchDeleteCharacters(ids: string[]): Promise<null> {
+  return request<null>({
+    method: 'POST',
+    url: '/characters/batch-delete',
+    data: {
+      ids,
+    },
   });
 }
