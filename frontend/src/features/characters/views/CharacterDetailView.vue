@@ -24,7 +24,7 @@ import { formatDate } from '@/shared/utils/date';
 import { useUpdateCharacterMutation } from '../api/mutations';
 import { useCharacterDetailQuery } from '../api/queries';
 import { CHARACTERS_CODE } from '../constants/characters-code';
-import type { CharacterUpdatePayload } from '../types/characters';
+import type { CharacterPayload } from '../types/characters';
 
 const route = useRoute();
 const router = useRouter();
@@ -44,7 +44,7 @@ const isNotFound = computed(
 const isEditing = ref(false);
 
 const formRef = ref<FormInst | null>(null);
-const formModel = reactive<CharacterUpdatePayload>({
+const formModel = reactive<CharacterPayload>({
   name: '',
   persona: '',
 });
