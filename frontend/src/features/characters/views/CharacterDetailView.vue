@@ -1,16 +1,6 @@
 <script setup lang="ts">
-import {
-  type FormInst,
-  type FormRules,
-  NAlert,
-  NButton,
-  NForm,
-  NFormItem,
-  NInput,
-  NText,
-  useMessage,
-} from 'naive-ui';
-import { computed, onMounted, onScopeDispose, reactive, ref } from 'vue';
+import { NButton, NText, useMessage } from 'naive-ui';
+import { computed, onMounted, onScopeDispose, ref } from 'vue';
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 
 import { isApiError } from '@/shared/api/error';
@@ -23,6 +13,7 @@ import { formatDate } from '@/shared/utils/date';
 
 import { useUpdateCharacterMutation } from '../api/mutations';
 import { useCharacterDetailQuery } from '../api/queries';
+import CharacterForm from '../components/CharacterForm.vue';
 import { CHARACTERS_CODE } from '../constants/characters-code';
 import type { CharacterPayload } from '../types/characters';
 
@@ -43,54 +34,23 @@ const isNotFound = computed(
 );
 const isEditing = ref(false);
 
-const formRef = ref<FormInst | null>(null);
-const formModel = reactive<CharacterPayload>({
+const formModel = ref<CharacterPayload>({
   name: '',
   persona: '',
 });
-const formRules: FormRules = {
-  name: [
-    {
-      required: true,
-      message: '请输入角色名称',
-      trigger: ['blur', 'input'],
-    },
-    {
-      max: 100,
-      message: '角色名称不能超过100个字符',
-      trigger: ['blur', 'input'],
-    },
-    {
-      validator: (_, value: string) => {
-        if (!value || value.trim().length === 0) {
-          return Promise.reject(new Error('角色名称不能为空'));
-        }
-        return Promise.resolve();
-      },
-      trigger: ['blur', 'input'],
-    },
-  ],
-  persona: [
-    {
-      max: 20000,
-      message: '人设最多 20000 个字符',
-      trigger: ['blur', 'input'],
-    },
-  ],
-};
 
 const isDirty = computed(
   () =>
     isEditing.value &&
     data.value !== undefined &&
-    (formModel.name !== data.value.name || formModel.persona !== data.value.persona),
+    (formModel.value.name !== data.value.name || formModel.value.persona !== data.value.persona),
 );
 
 function startEdit(): void {
   if (!data.value) return;
   reset();
-  formModel.name = data.value.name;
-  formModel.persona = data.value.persona;
+  formModel.value.name = data.value.name;
+  formModel.value.persona = data.value.persona;
   isEditing.value = true;
 }
 
@@ -99,16 +59,10 @@ function cancelEdit(): void {
 }
 
 async function handleSave(): Promise<void> {
-  if (formRef.value === null) return;
-  try {
-    await formRef.value.validate();
-  } catch {
-    return;
-  }
   try {
     await mutateAsync({
-      name: formModel.name.trim(),
-      persona: formModel.persona,
+      name: formModel.value.name.trim(),
+      persona: formModel.value.persona,
     });
   } catch {
     return;
@@ -155,37 +109,14 @@ const updatedAtText = computed(() => {
       </template>
     </EmptyState>
     <ErrorState v-else-if="isError" :message="error?.message" @retry="handleRetry" />
-    <NForm
-      v-else-if="isEditing && data"
-      ref="formRef"
-      :model="formModel"
-      :rules="formRules"
-      label-placement="top"
-    >
-      <NFormItem label="角色名称" path="name">
-        <NInput
-          v-model:value="formModel.name"
-          :maxlength="100"
-          show-count
-          placeholder="请输入角色名称"
-        />
-      </NFormItem>
-      <NFormItem label="角色人设" path="persona">
-        <NInput
-          v-model:value="formModel.persona"
-          type="textarea"
-          :maxlength="20000"
-          show-count
-          :autosize="{ minRows: 6, maxRows: 20 }"
-          placeholder="身份、性格与背景设定"
-        />
-      </NFormItem>
-      <NAlert v-if="saveError" type="error" :title="saveError.message" class="mb-4" />
-      <div class="flex gap-3">
-        <NButton type="primary" :loading="isSaving" @click="handleSave">保存</NButton>
-        <NButton :disabled="isSaving" @click="cancelEdit">取消</NButton>
-      </div>
-    </NForm>
+    <CharacterForm
+      v-if="isEditing && data"
+      v-model="formModel"
+      :submitting="isSaving"
+      :error-message="saveError?.message ?? ''"
+      @submit="handleSave"
+      @cancel="cancelEdit"
+    />
     <template v-else-if="data">
       <!-- 标题行 -->
       <div class="flex items-center justify-between gap-4">
