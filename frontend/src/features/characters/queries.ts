@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/vue-query';
 import { computed, type MaybeRefOrGetter, toValue } from 'vue';
 
-import { fetchCharacterList } from './api';
+import { fetchCharacterList } from './api/api';
 import { characterKeys } from './keys';
 import type { CharacterListParams } from './types';
 

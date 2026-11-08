@@ -1,7 +1,7 @@
 import { request } from '@/shared/api/request';
 import type { Page } from '@/shared/api/types';
 
-import type { CharacterListParams, CharacterSummary } from './types';
+import type { CharacterListParams, CharacterSummary } from '../types';
 
 /**
  * 获取角色列表

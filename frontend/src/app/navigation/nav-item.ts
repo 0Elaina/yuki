@@ -3,4 +3,9 @@ export interface NavItem {
   routeName: string;
 }
 
-export const navItems: NavItem[] = [];
+export const navItems: NavItem[] = [
+  {
+    label: '角色',
+    routeName: 'characters',
+  },
+];
