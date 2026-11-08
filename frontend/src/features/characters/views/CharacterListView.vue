@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { NInput, NPagination } from 'naive-ui';
 import { computed, onScopeDispose, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 
 import { DEFAULT_PAGE_PARAMS } from '@/shared/constants/page';
+import { ROUTE_NAMES } from '@/shared/constants/routes';
 import EmptyState from '@/shared/ui/EmptyState.vue';
 import ErrorState from '@/shared/ui/ErrorState.vue';
 import LoadingState from '@/shared/ui/LoadingState.vue';
 import { parsePositiveInt } from '@/shared/utils/number';
 
+import { useCharacterListQuery } from '../api/queries';
 import CharacterCard from '../components/CharacterCard.vue';
-import { useCharacterListQuery } from '../queries';
-import type { CharacterListParams } from '../types';
+import type { CharacterListParams } from '../types/characters';
 
 const route = useRoute();
 const router = useRouter();
@@ -94,7 +95,13 @@ onScopeDispose(() => {
     <EmptyState v-else-if="isEmpty" description="没有匹配的角色" />
     <template v-else>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <CharacterCard v-for="character in characters" :key="character.id" :character="character" />
+        <RouterLink
+          v-for="character in characters"
+          :key="character.id"
+          :to="{ name: ROUTE_NAMES.CHARACTERS_DETAIL, params: { id: character.id } }"
+          class="block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2"
+          ><CharacterCard :character="character"
+        /></RouterLink>
       </div>
       <div class="flex justify-end">
         <NPagination

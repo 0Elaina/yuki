@@ -5,7 +5,7 @@ import { computed } from 'vue';
 import { DATE_FORMAT } from '@/shared/constants/date';
 import { formatDate } from '@/shared/utils/date';
 
-import type { CharacterSummary } from '../types';
+import type { CharacterSummary } from '../types/characters';
 
 const props = defineProps<{
   character: CharacterSummary;
