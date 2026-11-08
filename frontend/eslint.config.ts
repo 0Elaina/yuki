@@ -1,8 +1,8 @@
-import { vueTsConfigs, withVueTs } from '@vue/eslint-config-typescript'
-import skipFormatting from 'eslint-config-prettier/flat'
-import pluginOxlint from 'eslint-plugin-oxlint'
-import simpleImportSort from 'eslint-plugin-simple-import-sort'
-import pluginVue from 'eslint-plugin-vue'
+import { vueTsConfigs, withVueTs } from '@vue/eslint-config-typescript';
+import skipFormatting from 'eslint-config-prettier/flat';
+import pluginOxlint from 'eslint-plugin-oxlint';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import pluginVue from 'eslint-plugin-vue';
 
 export default withVueTs(
   {
@@ -42,4 +42,4 @@ export default withVueTs(
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 
   skipFormatting,
-)
+);

@@ -1,30 +1,30 @@
 export interface ThemePalette {
-  primary: string
-  primaryHover: string
-  primaryPressed: string
-  primarySuppl: string
-  bodyColor: string
-  cardColor: string
-  popoverColor: string
-  inputColor: string
-  actionColor: string
-  borderColor: string
-  dividerColor: string
-  textColorBase: string
-  textColor1: string
-  textColor2: string
-  textColor3: string
-  placeholderColor: string
-  hoverColor: string
-  pressedColor: string
-  fontFamily: string
-  fontFamilyMono: string
-  fontWeightStrong: string
-  borderRadius: string
-  borderRadiusSmall: string
-  boxShadow1: string
-  boxShadow2: string
-  boxShadow3: string
+  primary: string;
+  primaryHover: string;
+  primaryPressed: string;
+  primarySuppl: string;
+  bodyColor: string;
+  cardColor: string;
+  popoverColor: string;
+  inputColor: string;
+  actionColor: string;
+  borderColor: string;
+  dividerColor: string;
+  textColorBase: string;
+  textColor1: string;
+  textColor2: string;
+  textColor3: string;
+  placeholderColor: string;
+  hoverColor: string;
+  pressedColor: string;
+  fontFamily: string;
+  fontFamilyMono: string;
+  fontWeightStrong: string;
+  borderRadius: string;
+  borderRadiusSmall: string;
+  boxShadow1: string;
+  boxShadow2: string;
+  boxShadow3: string;
 }
 
 export const palette: ThemePalette = {
@@ -65,4 +65,4 @@ export const palette: ThemePalette = {
   boxShadow1: '0 1px 2px rgba(43, 39, 34, 0.06)',
   boxShadow2: '0 4px 12px rgba(43, 39, 34, 0.08)',
   boxShadow3: '0 8px 24px rgba(43, 39, 34, 0.12)',
-}
+};

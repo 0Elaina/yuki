@@ -1,6 +1,6 @@
-import type { GlobalThemeOverrides } from 'naive-ui'
+import type { GlobalThemeOverrides } from 'naive-ui';
 
-import { palette, type ThemePalette } from './palette'
+import { palette, type ThemePalette } from './palette';
 
 /**
  * 把业务色板翻成 Naive 的主题覆盖。
@@ -66,5 +66,5 @@ export function createThemeOverrides(source: ThemePalette = palette): GlobalThem
     Message: {
       borderRadius: '10px',
     },
-  }
+  };
 }
