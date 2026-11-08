@@ -9,9 +9,9 @@ import ErrorState from '@/shared/ui/ErrorState.vue';
 import LoadingState from '@/shared/ui/LoadingState.vue';
 import { parsePositiveInt } from '@/shared/utils/number';
 
+import { useCharacterListQuery } from '../api/queries.ts';
 import CharacterCard from '../components/CharacterCard.vue';
-import { useCharacterListQuery } from '../queries';
-import type { CharacterListParams } from '../types';
+import type { CharacterListParams } from '../types/characters.ts';
 
 const route = useRoute();
 const router = useRouter();
