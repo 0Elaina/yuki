@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NInput, NPagination } from 'naive-ui';
+import { NButton, NInput, NPagination } from 'naive-ui';
 import { computed, onScopeDispose, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 
@@ -81,6 +81,10 @@ function handleRetry(): void {
   void refetch();
 }
 
+function goCreate(): void {
+  void router.push({ name: ROUTE_NAMES.CHARACTERS_NEW });
+}
+
 // 销毁时取消计时器
 onScopeDispose(() => {
   clearTimeout(keywordTimer);
@@ -89,7 +93,17 @@ onScopeDispose(() => {
 
 <template>
   <div class="flex flex-col gap-6">
-    <NInput v-model:value="keywordDraft" clearable placeholder="请输入角色名称" class="max-w-sm" />
+    <!-- 工具条 -->
+    <div class="flex items-center justify-between gap-3">
+      <NInput
+        v-model:value="keywordDraft"
+        clearable
+        placeholder="请输入角色名称"
+        class="max-w-sm"
+      />
+      <NButton type="primary" @click="goCreate">新建角色</NButton>
+    </div>
+
     <LoadingState v-if="isPending" />
     <ErrorState v-else-if="isError" :message="error?.message" @retry="handleRetry" />
     <EmptyState v-else-if="isEmpty" description="没有匹配的角色" />

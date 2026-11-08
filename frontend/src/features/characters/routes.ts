@@ -13,6 +13,15 @@ export const characterRoutes: RouteRecordRaw[] = [
     },
   },
   {
+    path: ROUTE_PATHS.CHARACTERS_NEW,
+    name: ROUTE_NAMES.CHARACTERS_NEW,
+    component: () => import('@/features/characters/views/CharacterCreateView.vue'),
+    meta: {
+      layout: 'default',
+      title: '新建角色',
+    },
+  },
+  {
     path: ROUTE_PATHS.CHARACTERS_DETAIL,
     name: ROUTE_NAMES.CHARACTERS_DETAIL,
     component: () => import('@/features/characters/views/CharacterDetailView.vue'),

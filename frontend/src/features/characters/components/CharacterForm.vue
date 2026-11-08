@@ -30,7 +30,6 @@ const formRules: FormRules = {
     {
       required: true,
       message: '请输入角色名称',
-      trigger: ['blur', 'input'],
     },
     {
       max: 100,
