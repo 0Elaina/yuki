@@ -1,26 +1,26 @@
-type ErrorNotifier = (message: string) => void
+type ErrorNotifier = (message: string) => void;
 
-const DEDUPE_WINDOW_MS = 3000
+const DEDUPE_WINDOW_MS = 3000;
 
-let notifier: ErrorNotifier | null = null
-let lastMessage = ''
-let lastNotifiedAt = 0
+let notifier: ErrorNotifier | null = null;
+let lastMessage = '';
+let lastNotifiedAt = 0;
 
 export function setErrorNotifier(next: ErrorNotifier | null): void {
-  notifier = next
+  notifier = next;
 }
 
 export function notifyError(message: string): void {
   if (notifier === null) {
-    return
+    return;
   }
 
-  const now = Date.now()
+  const now = Date.now();
   if (message === lastMessage && now - lastNotifiedAt < DEDUPE_WINDOW_MS) {
-    return
+    return;
   }
 
-  lastMessage = message
-  lastNotifiedAt = now
-  notifier(message)
+  lastMessage = message;
+  lastNotifiedAt = now;
+  notifier(message);
 }

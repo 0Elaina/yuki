@@ -8,12 +8,12 @@ import {
   NMessageProvider,
   NNotificationProvider,
   zhCN,
-} from 'naive-ui'
+} from 'naive-ui';
 
-import HttpErrorBridge from '@/app/providers/HttpErrorBridge.vue'
-import { createThemeOverrides } from '@/app/theme/theme-overrides'
+import HttpErrorBridge from '@/app/providers/HttpErrorBridge.vue';
+import { createThemeOverrides } from '@/app/theme/theme-overrides';
 
-const themeOverrides = createThemeOverrides()
+const themeOverrides = createThemeOverrides();
 </script>
 
 <template>

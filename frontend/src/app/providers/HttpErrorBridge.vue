@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useMessage } from 'naive-ui'
-import { onScopeDispose } from 'vue'
+import { useMessage } from 'naive-ui';
+import { onScopeDispose } from 'vue';
 
-import { setErrorNotifier } from '@/shared/api/notifier'
+import { setErrorNotifier } from '@/shared/api/notifier';
 
-const message = useMessage()
+const message = useMessage();
 
-setErrorNotifier((text) => message.error(text))
+setErrorNotifier((text) => message.error(text));
 
 onScopeDispose(() => {
-  setErrorNotifier(null)
-})
+  setErrorNotifier(null);
+});
 </script>
 
 <template>

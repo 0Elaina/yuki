@@ -65,7 +65,7 @@ flowchart LR
 
 ## 目录组织
 
-后端采用 Python src 布局，前端按应用组装、页面、业务功能与公共能力组织。
+后端采用 Python src 布局；前端按应用组装、业务功能与公共能力组织，页面视图归入所属层级的 views 目录。
 
 ```text
 backend/
@@ -89,8 +89,10 @@ backend/
 frontend/
 └── src/
     ├── app/
-    ├── pages/
+    │   └── views/
     ├── features/
+    │   └── <feature>/
+    │       └── views/
     └── shared/
 
 docs/
@@ -103,13 +105,12 @@ docs/
 | 后端 infrastructure | 数据库、Redis、S3、向量库与 AI 服务的技术接入，不依赖业务模块 |
 | 后端 shared | 被多个模块实际共享的类型与小型公共能力，不容纳无归属的业务逻辑 |
 | 后端 migrations | Alembic 环境与迁移版本，供开发者显式执行 |
-| 前端 app | 应用初始化、路由、布局、主题和全局提供者 |
-| 前端 pages | 页面入口与功能组合，避免在页面内集中实现所有业务 |
-| 前端 features | 按角色、聊天、资源、设置等功能组织组件、请求、状态与类型 |
-| 前端 shared | 公共 HTTP 能力、通用组件和稳定工具，不反向依赖业务功能 |
+| 前端 app | 应用初始化、路由、布局、主题、全局提供者与应用级页面 |
+| 前端 features | 按角色、聊天、资源、设置等功能组织页面视图、组件、请求、查询与类型 |
+| 前端 shared | 公共 HTTP 能力、通用组件、常量与稳定工具，不反向依赖业务功能 |
 | docs | 已确认需求、设计约定与实际接口、数据库契约 |
 
-页面通过功能入口组合业务；需要协调多个功能的逻辑留在页面或应用组装层，避免功能间循环导入。Pinia 按功能归属，组件局部输入与展示状态不默认进入全局状态。
+页面视图放在 `app/views` 或对应 feature 的 `views`，通过功能入口组合业务；需要协调多个功能的逻辑留在页面或应用组装层，避免功能间循环导入。Pinia 按功能归属，组件局部输入与展示状态不默认进入全局状态。
 
 采用 Python src 布局分离导入包与项目根目录，参考 [Python Packaging 指南](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/)。模块化路由参考 FastAPI 官方能力；具体业务目录和前端组织是结合本项目维护成本作出的约定，不是框架强制标准。
 

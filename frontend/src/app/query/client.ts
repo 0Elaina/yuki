@@ -1,6 +1,6 @@
-import { QueryClient } from '@tanstack/vue-query'
+import { QueryClient } from '@tanstack/vue-query';
 
-const STALE_TIME_MS = 30_000
+const STALE_TIME_MS = 30_000;
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,4 +13,4 @@ export const queryClient = new QueryClient({
       retry: false,
     },
   },
-})
+});
