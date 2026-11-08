@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton, NText, useMessage } from 'naive-ui';
+import { NButton, NPopconfirm, NText, useMessage } from 'naive-ui';
 import { computed, onMounted, onScopeDispose, ref } from 'vue';
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
 
@@ -11,7 +11,7 @@ import ErrorState from '@/shared/ui/ErrorState.vue';
 import LoadingState from '@/shared/ui/LoadingState.vue';
 import { formatDate } from '@/shared/utils/date';
 
-import { useUpdateCharacterMutation } from '../api/mutations';
+import { useDeleteCharacterMutation, useUpdateCharacterMutation } from '../api/mutations';
 import { useCharacterDetailQuery } from '../api/queries';
 import CharacterForm from '../components/CharacterForm.vue';
 import { CHARACTERS_CODE } from '../constants/characters-code';
@@ -29,6 +29,8 @@ const {
   mutateAsync,
   reset,
 } = useUpdateCharacterMutation(id);
+const { isPending: isDeleting, mutateAsync: deleteAsync } = useDeleteCharacterMutation(id);
+
 const isNotFound = computed(
   () => isApiError(error.value) && error.value.code === CHARACTERS_CODE.CHARACTER_NOT_FOUND,
 );
@@ -69,6 +71,17 @@ async function handleSave(): Promise<void> {
   }
   message.success('保存成功');
   isEditing.value = false;
+}
+
+async function handleDelete(): Promise<void> {
+  try {
+    await deleteAsync();
+  } catch (err) {
+    if (isApiError(err)) message.error(err.message);
+    return;
+  }
+  message.success('删除成功');
+  backToList();
 }
 
 function handleRetry(): void {
@@ -123,6 +136,12 @@ const updatedAtText = computed(() => {
         <h1 class="text-xl font-semibold">{{ data.name }}</h1>
         <div class="flex items-center gap-2">
           <NButton type="primary" @click="startEdit">编辑</NButton>
+          <NPopconfirm positive-text="删除" negative-text="取消" @positive-click="handleDelete">
+            <template #trigger>
+              <NButton type="error" :loading="isDeleting">删除</NButton>
+            </template>
+            删除后无法恢复, 确定删除「{{ data.name }}」吗?
+          </NPopconfirm>
           <NButton @click="backToList">返回列表</NButton>
         </div>
       </div>
