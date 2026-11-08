@@ -1,0 +1,3 @@
+export const CHARACTERS_CODE = {
+  CHARACTER_NOT_FOUND: 'CHARACTER_NOT_FOUND',
+} as const;
