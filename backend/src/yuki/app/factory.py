@@ -11,6 +11,7 @@ from yuki.app.exception_handlers import register_exception_handlers
 from yuki.app.lifespan import application_lifespan
 from yuki.infrastructure.config import AppSettings
 from yuki.modules.characters.router import router as characters_router
+from yuki.modules.conversations.router import router as conversations_router
 from yuki.shared.api.response import ApiResponse
 
 
@@ -31,6 +32,7 @@ def create_app() -> ASGIApp:
     )
     register_exception_handlers(app)
     app.include_router(characters_router)
+    app.include_router(conversations_router)
 
     # 放在应用外层，使未处理异常的 500 响应也包含适用的 CORS 头。
     return CORSMiddleware(
