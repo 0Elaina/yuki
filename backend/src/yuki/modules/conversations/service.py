@@ -53,3 +53,13 @@ async def list_conversations(
     return Page[ConversationDetail](
         items=items, total=page.total, page=page.page, size=page.size, pages=page.pages
     )
+
+
+async def delete_conversations(session: AsyncSession, *, ids: list[int]) -> int:
+    """批量删除会话, 任一不存在则回滚并报错"""
+
+    async with session.begin():
+        deleted_ids = await conversation_repository.delete_conversations(session, ids=ids)
+        if len(deleted_ids) != len(ids):
+            raise BusinessException(ConversationApiCode.CONVERSATION_NOT_FOUND)
+    return len(deleted_ids)
