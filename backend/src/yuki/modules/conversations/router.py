@@ -5,7 +5,11 @@ from fastapi_pagination import Page
 
 from yuki.app.dependencies import SessionDep
 from yuki.modules.conversations import service as conversation_service
-from yuki.modules.conversations.schemas import ConversationCreate, ConversationDetail
+from yuki.modules.conversations.schemas import (
+    ConversationBatchDelete,
+    ConversationCreate,
+    ConversationDetail,
+)
 from yuki.shared.api.pagination import PageQuery
 from yuki.shared.api.response import ApiResponse
 from yuki.shared.constants.number import IntBoundary
@@ -46,3 +50,23 @@ async def list_conversations(
         session, character_id=character_id, params=params
     )
     return ApiResponse.success(page)
+
+
+@router.post("/batch-delete", summary="批量删除会话")
+async def batch_delete_conversations(
+    body: ConversationBatchDelete, session: SessionDep
+) -> ApiResponse[int]:
+    """批量删除会话"""
+
+    deleted_count = await conversation_service.delete_conversations(session, ids=body.ids)
+    return ApiResponse.success(deleted_count)
+
+
+@router.delete("/{conversation_id}", summary="根据ID删除会话")
+async def delete_conversation(
+    conversation_id: Annotated[int, Path(gt=0, le=IntBoundary.INT_MAX)], session: SessionDep
+) -> ApiResponse[None]:
+    """根据ID删除会话"""
+
+    await conversation_service.delete_conversations(session, ids=[conversation_id])
+    return ApiResponse.success()
