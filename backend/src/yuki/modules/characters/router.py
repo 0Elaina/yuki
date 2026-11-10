@@ -15,7 +15,7 @@ from yuki.modules.characters.schemas import (
 )
 from yuki.shared.api.pagination import PageQuery
 from yuki.shared.api.response import ApiResponse
-from yuki.shared.util.sql_utils import BIGINT_MAX
+from yuki.shared.constants.number import IntBoundary
 
 router = APIRouter(prefix="/api/v1/characters", tags=["characters"])
 
@@ -48,7 +48,7 @@ async def list_characters(
 
 @router.get("/{character_id}", summary="查询角色详情")
 async def get_character(
-    character_id: Annotated[int, Path(gt=0, le=BIGINT_MAX)], session: SessionDep
+    character_id: Annotated[int, Path(gt=0, le=IntBoundary.INT_MAX)], session: SessionDep
 ) -> ApiResponse[CharacterDetail]:
     """查询角色详情"""
 
@@ -58,7 +58,7 @@ async def get_character(
 
 @router.put("/{character_id}", summary="修改角色资料")
 async def update_character(
-    character_id: Annotated[int, Path(gt=0, le=BIGINT_MAX)],
+    character_id: Annotated[int, Path(gt=0, le=IntBoundary.INT_MAX)],
     body: CharacterUpdate,
     session: SessionDep,
 ) -> ApiResponse[CharacterDetail]:
@@ -80,7 +80,7 @@ async def batch_delete_characters(
 
 @router.delete("/{character_id}", summary="根据ID删除角色")
 async def delete_character(
-    character_id: Annotated[int, Path(gt=0, le=BIGINT_MAX)], session: SessionDep
+    character_id: Annotated[int, Path(gt=0, le=IntBoundary.INT_MAX)], session: SessionDep
 ) -> ApiResponse[None]:
     """根据ID删除角色"""
 
