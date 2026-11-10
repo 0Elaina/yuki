@@ -1,7 +1,7 @@
 from fastapi_pagination import Page
 from fastapi_pagination.config import Config
 from fastapi_pagination.ext.sqlalchemy import apaginate
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from yuki.modules.conversations.models import Conversation
@@ -36,3 +36,11 @@ async def page_conversations(
         .order_by(Conversation.updated_at.desc(), Conversation.id.desc())
     )
     return await apaginate(session, stmt, params=params, config=Config(page_cls=Page[Conversation]))
+
+
+async def delete_conversations(session: AsyncSession, *, ids: list[int]) -> list[int]:
+    """批量删除会话并返回已删除的 ID 列表"""
+
+    stmt = delete(Conversation).where(Conversation.id.in_(ids)).returning(Conversation.id)
+    result = await session.execute(stmt)
+    return list(result.scalars().all())
