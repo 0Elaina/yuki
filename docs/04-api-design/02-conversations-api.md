@@ -111,3 +111,59 @@
 | 422 | PARAM_VALIDATION_FAILED |
 | 500 | INTERNAL_SERVER_ERROR |
 
+## POST /api/v1/conversations/batch-delete
+
+批量删除会话，允许包含不同角色的会话；任一指定会话不存在时整批回滚，不产生局部删除。
+
+**请求参数**
+
+| 字段 | 类型 | 位置(body/query/path/header) | 必填 | 说明（枚举须写全映射） |
+| --- | --- | --- | --- | --- |
+| ids | array<string> | body | ✅ | 待删除的会话 ID 数组，1～100 项，按解析后的整数判重不可重复，每项为十进制数字字符串 |
+
+**响应示例**
+
+```json
+{
+  "data": 2,
+  "code": "SUCCESS",
+  "message": "响应成功"
+}
+```
+
+**错误码**
+
+| 状态码 | 错误码 |
+| --- | --- |
+| 404 | CONVERSATION_NOT_FOUND |
+| 422 | PARAM_VALIDATION_FAILED |
+| 500 | INTERNAL_SERVER_ERROR |
+
+## DELETE /api/v1/conversations/{conversation_id}
+
+根据会话 ID 删除单个会话。
+
+**请求参数**
+
+| 字段 | 类型 | 位置(body/query/path/header) | 必填 | 说明（枚举须写全映射） |
+| --- | --- | --- | --- | --- |
+| conversation_id | int | path | ✅ | 会话 ID，大于 0 且不超过 2^63 - 1 |
+
+**响应示例**
+
+```json
+{
+  "data": null,
+  "code": "SUCCESS",
+  "message": "响应成功"
+}
+```
+
+**错误码**
+
+| 状态码 | 错误码 |
+| --- | --- |
+| 404 | CONVERSATION_NOT_FOUND |
+| 422 | PARAM_VALIDATION_FAILED |
+| 500 | INTERNAL_SERVER_ERROR |
+
