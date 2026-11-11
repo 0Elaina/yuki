@@ -10,7 +10,11 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from yuki.infrastructure.config import PostgresSettings
 from yuki.infrastructure.database.base import Base
 from yuki.modules.characters.models import Character  # noqa: F401
-from yuki.modules.conversations.models import Conversation  # noqa: F401
+from yuki.modules.conversations.models import (  # noqa: F401
+    Conversation,
+    ConversationTurn,
+    Message,
+)
 
 config = context.config
 if config.config_file_name is not None:

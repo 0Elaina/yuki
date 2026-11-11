@@ -9,8 +9,9 @@ from yuki.modules.conversations.schemas import (
     ConversationBatchDelete,
     ConversationCreate,
     ConversationDetail,
+    MessageHistory,
 )
-from yuki.shared.api.pagination import PageQuery
+from yuki.shared.api.pagination import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, PageQuery
 from yuki.shared.api.response import ApiResponse
 from yuki.shared.constants.number import IntBoundary
 from yuki.shared.type.field_type import NormalizedId
@@ -70,3 +71,17 @@ async def delete_conversation(
 
     await conversation_service.delete_conversations(session, ids=[conversation_id])
     return ApiResponse.success()
+
+
+@router.get("/{conversation_id}/messages", summary="查询会话历史消息")
+async def get_message_history(
+    conversation_id: Annotated[int, Path(gt=0, le=IntBoundary.INT_MAX)],
+    session: SessionDep,
+    before_id: Annotated[NormalizedId | None, Query(alias="beforeId")] = None,
+    size: Annotated[int, Query(ge=1, le=MAX_PAGE_SIZE)] = DEFAULT_PAGE_SIZE,
+) -> ApiResponse[MessageHistory]:
+    """查询会话历史消息"""
+    history = await conversation_service.get_message_history(
+        session, conversation_id=conversation_id, before_id=before_id, size=size
+    )
+    return ApiResponse.success(history)

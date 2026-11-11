@@ -4,7 +4,7 @@ from fastapi_pagination.ext.sqlalchemy import apaginate
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from yuki.modules.conversations.models import Conversation
+from yuki.modules.conversations.models import Conversation, Message
 from yuki.shared.api.pagination import PageQuery
 
 
@@ -44,3 +44,16 @@ async def delete_conversations(session: AsyncSession, *, ids: list[int]) -> list
     stmt = delete(Conversation).where(Conversation.id.in_(ids)).returning(Conversation.id)
     result = await session.execute(stmt)
     return list(result.scalars().all())
+
+
+async def list_messages_before(
+    session: AsyncSession, *, conversation_id: int, before_id: int | None, limit: int
+) -> list[Message]:
+    """按消息 ID 倒序查询指定边界之前的会话消息"""
+
+    stmt = select(Message).where(Message.conversation_id == conversation_id)
+    if before_id is not None:
+        stmt = stmt.where(Message.id < before_id)
+    stmt = stmt.order_by(Message.id.desc()).limit(limit)
+    result = await session.scalars(stmt)
+    return list(result.all())

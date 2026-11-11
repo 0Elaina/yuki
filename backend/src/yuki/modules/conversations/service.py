@@ -6,7 +6,7 @@ from yuki.modules.characters.api_code import CharacterApiCode
 from yuki.modules.conversations import repository as conversation_repository
 from yuki.modules.conversations.api_code import ConversationApiCode
 from yuki.modules.conversations.constants import DEFAULT_CONVERSATION_TITLE
-from yuki.modules.conversations.schemas import ConversationDetail
+from yuki.modules.conversations.schemas import ConversationDetail, MessageDetail, MessageHistory
 from yuki.shared.api.pagination import PageQuery
 from yuki.shared.exceptions import BusinessException
 
@@ -63,3 +63,25 @@ async def delete_conversations(session: AsyncSession, *, ids: list[int]) -> int:
         if len(deleted_ids) != len(ids):
             raise BusinessException(ConversationApiCode.CONVERSATION_NOT_FOUND)
     return len(deleted_ids)
+
+
+async def get_message_history(
+    session: AsyncSession, *, conversation_id: int, before_id: int | None, size: int
+) -> MessageHistory:
+    """按消息 ID 游标分页读取会话历史"""
+
+    async with session.begin():
+        conversation = await conversation_repository.find_conversation_by_id(
+            session, conversation_id=conversation_id
+        )
+        if conversation is None:
+            raise BusinessException(ConversationApiCode.CONVERSATION_NOT_FOUND)
+        rows = await conversation_repository.list_messages_before(
+            session, conversation_id=conversation_id, before_id=before_id, limit=size + 1
+        )
+        has_more = len(rows) > size
+        page_rows = rows[:size]
+        items = [MessageDetail.of(row) for row in page_rows]
+        next_before_id = str(page_rows[-1].id) if has_more else None
+
+    return MessageHistory(items=items, next_before_id=next_before_id)
