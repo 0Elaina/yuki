@@ -62,3 +62,8 @@ OpenAPI 的公共 422、500 响应声明使用相同的 ApiResponse 结构。实
 调用 apaginate 时传入已有 session、明确排序的 Select 和 PageQuery；嵌套在 ApiResponse 中时，通过库原生 Config(page_cls=Page[模型]) 显式指定结果类型。当数据访问层查询 ORM 时返回 Page[ORM]；业务层在事务内将其 items 转换为 Page[输出模型]，复用原始分页元数据返回。输出模型按需启用 Pydantic 的 from_attributes，业务模块负责具体的数据转换。
 
 业务层在 session.begin() 内执行查询；分页不另建会话或管理事务。计数使用库原生能力，需要专用计数时传入 count_query。参考[官方 SQLAlchemy 集成](https://uriyyo-fastapi-pagination.netlify.app/integrations/sqlalchemy/paginate/)。
+
+### 分页模式适用边界
+
+- **页码分页（`Page[T]` + `PageQuery`）**：适用于需要展示总数及随机跳页的列表查询，用于角色列表（`GET /api/v1/characters`）与会话列表（`GET /api/v1/conversations`）。
+- **单向 ID 游标分页（`beforeId` + `nextBeforeId`）**：适用于持续追加写入、按主键倒序单向向上翻页的场景，用于会话历史消息（`GET /api/v1/conversations/{conversation_id}/messages`），避免新消息写入导致传统页码偏移。

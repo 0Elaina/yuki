@@ -167,3 +167,55 @@
 | 422 | PARAM_VALIDATION_FAILED |
 | 500 | INTERNAL_SERVER_ERROR |
 
+## GET /api/v1/conversations/{conversation_id}/messages
+
+按消息 ID 游标向前翻页查询会话历史消息，按消息 ID 倒序返回，无更早消息时 `nextBeforeId` 为 `null`。
+
+**请求参数**
+
+| 字段 | 类型 | 位置(body/query/path/header) | 必填 | 说明（枚举须写全映射） |
+| --- | --- | --- | --- | --- |
+| conversation_id | int | path | ✅ | 会话 ID，大于 0 且不超过 2^63 - 1 |
+| beforeId | string | query | ❌ | 消息 ID 游标，正整数十进制字符串；传入时只取 ID 小于该值的更早消息，省略时取最新一批 |
+| size | int | query | ❌ | 每页条数，默认 20，1 至 100 |
+
+**响应示例**
+
+```json
+{
+  "data": {
+    "items": [
+      {
+        "id": "10",
+        "conversationId": "1",
+        "turnId": "5",
+        "role": "assistant",
+        "content": "喵呜~ 主人好！",
+        "createdAt": "2026-11-11T15:00:05Z",
+        "updatedAt": "2026-11-11T15:00:05Z"
+      },
+      {
+        "id": "9",
+        "conversationId": "1",
+        "turnId": "5",
+        "role": "user",
+        "content": "你好呀",
+        "createdAt": "2026-11-11T15:00:00Z",
+        "updatedAt": "2026-11-11T15:00:00Z"
+      }
+    ],
+    "nextBeforeId": "9"
+  },
+  "code": "SUCCESS",
+  "message": "响应成功"
+}
+```
+
+**错误码**
+
+| 状态码 | 错误码 |
+| --- | --- |
+| 404 | CONVERSATION_NOT_FOUND |
+| 422 | PARAM_VALIDATION_FAILED |
+| 500 | INTERNAL_SERVER_ERROR |
+
